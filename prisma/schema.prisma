@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  userName  String  
+  password  String
+  confirmPassword  String?
+  token     String?
+  status    String?
+  createdAt DateTime @default(now())
+}
+
+model Company {
+  id        Int      @id @default(autoincrement())
+  companyNameThai String   
+  companyNameEng String? 
+  description String?  
+  address     String?
+  subDistrict String?
+  district    String?
+  province    String?
+  zipcode     String?
+  taxId       String?
+  phone       String?   
+  fax         String?
+  logo        String?
+  createdAt   DateTime @default(now())
+}
+
+model Employee {
+  id        Int      @id @default(autoincrement())
+  employeeId  String   @unique
+  firstName  String  
+  lastName  String
+  email     String   @unique
+  position  String?
+  department   String?
+  phoneNumber String?
+  image     String?
+  startDate DateTime?  @db.Date
+  birthDate  DateTime? @db.Date
+  age       Int?
+  address   String?
+  education String?
+  status    String?
+  createdAt DateTime @default(now())
+}
+
+model Project {
+  id        Int      @id @default(autoincrement())
+  projectNumber  String   @unique
+  projectName  String  
+  customer  String
+  description     String?   
+  contactNumber  String?
+  startDate DateTime?  @db.Date
+  endDate  DateTime? @db.Date
+  projectManager   String?
+  status    String?
+  createdAt DateTime @default(now())
+}
