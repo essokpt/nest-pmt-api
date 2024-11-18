@@ -1,10 +1,11 @@
-import { HttpStatus, Injectable, StreamableFile, UploadedFile } from '@nestjs/common';
-import { CreateFileManagerDto } from './dto/create-file-manager.dto';
-import { UpdateFileManagerDto } from './dto/update-file-manager.dto';
-const fs = require('fs');
+import { HttpStatus, Injectable, Response, StreamableFile } from '@nestjs/common';
 import { join } from 'path';
 import { createReadStream } from 'fs';
+import { RenameDirectoryDto } from './dto/create-file-manager.dto';
 
+const AdmZip = require('adm-zip')
+const path = require("path");
+const fs = require('fs-extra');
 const rootPath = join(__dirname, '../../../', 'web_files');
 
 @Injectable()
@@ -98,8 +99,71 @@ export class FileManagerService {
     }   
   }
 
-  update(id: number, updateFileManagerDto: UpdateFileManagerDto) {
-    return `This action updates a #${id} fileManager`;
+  async downloadMultiFile(filePath: []) {
+    try {
+     // const zip = new JSZip();
+      const admZip = new AdmZip();
+     console.log('zip file:', rootPath+filePath);
+     
+      filePath.forEach(element => {
+        const fileName = path.basename(rootPath+element);
+        if (!fs.lstatSync(rootPath+element).isDirectory()) {
+          const fileContent = fs.readFileSync(rootPath+element);
+          admZip.addFile(fileName, fileContent);
+         
+        }else{          
+          admZip.addLocalFolder(rootPath+element, `/${fileName}`);
+          //console.log('zip a folder:',rootPath+element);          
+        }
+      });
+      return admZip.toBuffer();
+
+      
+    } catch (err) {
+      console.error(err);
+      return  {
+        status: HttpStatus.BAD_REQUEST,
+        message: `Request error:${err}`,
+      }    
+    }    
+  }
+
+  async downloadFolder(dirPath: string) {
+    try {     
+      console.log('download path:',rootPath+dirPath);
+      const admZip = new AdmZip();    
+      const dirName = path.basename(rootPath+dirPath);
+      if (fs.lstatSync(rootPath+dirPath).isDirectory()) {
+        admZip.addLocalFolder(rootPath+dirPath, `/${dirName}`);
+        return  admZip.toBuffer();
+    
+      }
+     
+    } catch (err) {
+      console.error(err);
+      return  {
+        status: HttpStatus.BAD_REQUEST,
+        message: `no such file or directory:${err}`,
+      }    
+    }    
+  }
+
+  renameDir(directory: RenameDirectoryDto) {
+    try {
+      fs.renameSync(rootPath+directory.oldDirectoryName, rootPath+directory.newDirectoryName);
+   
+      console.log(`${directory} is rename!`);
+      return  {
+        status: HttpStatus.OK,
+        message: `${directory.oldDirectoryName} is rename to ${directory.newDirectoryName} completed.`,
+      }                 
+    } catch (err) {
+      console.error(err);
+      return  {
+        status: HttpStatus.BAD_REQUEST,
+        message: `not found directory:${err}`,
+      }    
+    }   
   }
 
   removeDirectory(directory: string) {
@@ -153,5 +217,42 @@ export class FileManagerService {
         message: `internal error:${err}`,
       }    
     }   
+  }
+
+  removeAllFileOrDirectory(file: []) {          
+    try {
+      file.forEach(element => {
+        if (!fs.lstatSync(rootPath+element).isDirectory()) {
+          fs.unlink(rootPath+element, err => {
+            if (err) {
+              throw err;
+            }
+            console.log(`${rootPath+element} :file is deleted!`);                
+          }); 
+                  
+        }else{
+          fs.rm(rootPath+element, { recursive: true, force: true }, err => {
+            if (err) {
+              throw err;
+            }
+            console.log(`${element} : directory is deleted!`);
+                  
+          });      
+        }
+      });
+
+      // console.log(`not found file:${rootPath+file}`);
+      return  {
+        status: HttpStatus.OK,
+        message: `delete all file or directory completed!`,
+      }    
+    } catch (err) {
+      console.error(err);
+      return  {
+        status: HttpStatus.BAD_REQUEST,
+        message: `Request error:${err}`,
+      }    
+    }   
+   
   }
 }

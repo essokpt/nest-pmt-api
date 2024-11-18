@@ -22,6 +22,23 @@ export class CreateDirectoryDto{
 
 }
 
+export class RenameDirectoryDto{
+  @IsString()
+  @ApiProperty({
+    example : 'input old directory name',
+    required : true
+    })
+  oldDirectoryName:string
+
+  @IsString()
+  @ApiProperty({
+    example : 'input new directory name',
+    required : true
+    })
+  newDirectoryName:string
+
+}
+
 export class CreateFileManagerDto {
     @ApiProperty({
         description: 'Description of the image',
