@@ -14,12 +14,14 @@ export class ProjectService {
       });
 
       if(result.id) 
+        console.log('create successfully.');
         return {
         status: HttpStatus.OK,
         message: 'create successfully.',
       }       
      
     } catch (error) {
+      console.log('create error.',error.message);
       return { 
         status: HttpStatus.BAD_REQUEST,
         error: error,
@@ -45,12 +47,15 @@ export class ProjectService {
       });
 
       if(result.id) 
+        console.log('update successfully.');
+        
         return {
         status: HttpStatus.OK,
         message: 'update successfully.',
       }       
      
     } catch (error) {
+      console.log('update error.',error.message);
       return { 
         status: HttpStatus.BAD_REQUEST,
         error: error,

@@ -59,6 +59,13 @@ export class CreateProjectDto {
   })
   endDate  : Date
 
+  @IsNotEmpty()
+  @ApiProperty({
+    example : 'day of warranty',
+    required : true
+  })
+  warranty  : number  
+
   @ApiProperty({
     example : 'string',
   })

@@ -77,15 +77,16 @@ export class FileManagerService {
     return fs.readFileSync( filepath, 'utf8');
   }
 
-  downloadFile(path: string) {
+  downloadFile(pathname: string) {
     try {
-      const filepath = rootPath+path
+      const filepath = rootPath+pathname
+      const filename = path.basename(encodeURI(pathname))
       console.log('downloadFile path:',filepath );
       if (fs.existsSync(filepath)) {  
         const file = createReadStream(filepath);           
         return new StreamableFile(file, {
           type: '*',
-          disposition: `attachment; filename=${encodeURI(path)}`,
+          disposition: `attachment; filename=${filename}`,
         });     
        
       }
@@ -116,9 +117,7 @@ export class FileManagerService {
           //console.log('zip a folder:',rootPath+element);          
         }
       });
-      return admZip.toBuffer();
-
-      
+      return admZip.toBuffer();    
     } catch (err) {
       console.error(err);
       return  {
@@ -151,8 +150,6 @@ export class FileManagerService {
   renameDir(directory: RenameDirectoryDto) {
     try {
       fs.renameSync(rootPath+directory.oldDirectoryName, rootPath+directory.newDirectoryName);
-   
-      console.log(`${directory} is rename!`);
       return  {
         status: HttpStatus.OK,
         message: `${directory.oldDirectoryName} is rename to ${directory.newDirectoryName} completed.`,

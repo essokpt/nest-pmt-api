@@ -71,5 +71,6 @@ model Project {
   endDate  DateTime? @db.Date
   projectManager   String?
   status    String?
+  warranty   Int @default(0)
   createdAt DateTime @default(now())
 }
