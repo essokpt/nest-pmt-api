@@ -10,6 +10,7 @@ import { PrismaModule } from 'prisma/prisma.module';
 import { FileManagerModule } from './file-manager/file-manager.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
   imports : [ 
@@ -20,7 +21,7 @@ import { join } from 'path';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../../', 'web_files'),
     }),
-    UserModule, ProjectModule, AuthModule, EmployeeModule, CompanyModule,PrismaModule, FileManagerModule
+    UserModule, ProjectModule, AuthModule, EmployeeModule, CompanyModule,PrismaModule, FileManagerModule, CustomerModule
   ],
   controllers: [AppController],
   providers: [],

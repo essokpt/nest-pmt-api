@@ -74,3 +74,26 @@ model Project {
   warranty   Int @default(0)
   createdAt DateTime @default(now())
 }
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  engName  String   @unique
+  thaiName  String  @unique
+  shortName String?
+  address   String  
+  subdistrict String?
+  district  String?
+  province  String?
+  zipcode   String?
+  description     String?   
+  phone     String?
+  fax       String?
+  mobile    String?
+  taxId     String?
+  contactName   String?
+  contactMobile    String?
+  contactEmail    String?
+  distance  Int?
+  remark    String?
+  createdAt DateTime @default(now())
+}
