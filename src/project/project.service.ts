@@ -30,7 +30,11 @@ export class ProjectService {
   }
 
   async findAll() {
-    return await this.prisma.project.findMany();
+    return await this.prisma.project.findMany({
+      include:{
+        customer: true
+      }
+    });
   }
 
   async findOne(id: number) {

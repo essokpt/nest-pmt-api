@@ -27,10 +27,10 @@ export class CreateProjectDto {
   
   @IsNotEmpty()
   @ApiProperty({
-    example : 'string',
+    example : 'number of customer id',
     required : true
   })
-  customer     : string   
+  customerId     : number   
 
   @ApiProperty({
     example : 'string',

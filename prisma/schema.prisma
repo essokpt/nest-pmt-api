@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -63,8 +64,9 @@ model Employee {
 model Project {
   id        Int      @id @default(autoincrement())
   projectNumber  String   @unique
-  projectName  String  
-  customer  String
+  projectName  String 
+  customer    Customer @relation(fields: [customerId], references: [id]) 
+  customerId  Int @default(1)
   description     String?   
   contactNumber  String?
   startDate DateTime?  @db.Date
@@ -96,4 +98,5 @@ model Customer {
   distance  Int?
   remark    String?
   createdAt DateTime @default(now())
+  projects Project[]
 }
