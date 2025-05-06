@@ -74,6 +74,7 @@ model Project {
   projectManager   String?
   status    String?
   warranty   Int @default(0)
+  endWarrantyDate DateTime? @db.Date
   createdAt DateTime @default(now())
 }
 
@@ -99,4 +100,181 @@ model Customer {
   remark    String?
   createdAt DateTime @default(now())
   projects Project[]
+  orders     Order[]
 }
+
+model Vender {
+  id        Int      @id @default(autoincrement())
+  engName  String   @unique
+  thaiName  String  @unique
+  shortName String?
+  address   String  
+  subdistrict String?
+  district  String?
+  province  String?
+  zipcode   String?
+  description     String?   
+  phone     String?
+  fax       String?
+  mobile    String?
+  taxId     String?
+  contactName   String?
+  contactMobile    String?
+  contactEmail    String?
+  remark    String?
+  createdAt DateTime @default(now())
+ 
+}
+
+
+model Product{
+  id        Int      @id @default(autoincrement())
+  model     String   @unique
+  brand String?
+  productName  String  
+  description   String? 
+  price    Float?
+  sellingPrice Float?
+  size     String?
+  weight   Float?
+  status String?
+  remark String?
+  stockQuantity  Float?
+  images  ProductImage[]
+  productItems ProductItem[]
+  
+  productType   ProductType @relation(fields: [productTypeId], references: [id])
+  productTypeId Int @default(0)
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+}
+
+model ProductImage{
+  id      Int      @id @default(autoincrement())
+  name    String?   
+  url     String?
+  type    String?
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  
+}
+
+model ProductItem{
+  id      Int      @id @default(autoincrement())
+  serialNumber    String? 
+  code    String?
+  lot     String? 
+  color   String? 
+  size    String?
+
+  stockInValue Float?
+  stockOutValue Float?
+  barCodeUrl    String?
+  qrCodeUrl     String?
+  quantity Int?
+  unit    String?
+  mfg    DateTime? @default(now())
+  exp    DateTime? @default(now())
+  stockIn   Store? @relation(fields: [storeId], references: [id])
+  storeId Int?
+  
+  stockOn  Stock? @relation(fields: [stockId], references: [id], onDelete: Cascade)
+  stockId Int?
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  status    String?
+  sku  String?
+
+  orderItems OrderItem[]
+}
+
+model Category{
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  remark    String?
+  iconUrl   String?
+  products  Product[]
+
+  productType   ProductType @relation(fields: [productTypeId], references: [id])
+  productTypeId Int @default(0)
+  
+}
+
+model ProductType{
+  id        Int      @id @default(autoincrement())
+  typeName      String   @unique
+  remark    String?
+  image    String?
+  products  Product[]
+  categories Category[]
+}
+
+model Store { 
+  id        Int      @id @default(autoincrement())
+  storeName String   @unique
+  description   String? 
+  status     String?
+  remark     String?   
+
+  type   StoreType @relation(fields: [storeTypeId], references: [id])
+  storeTypeId Int
+
+  productItems ProductItem[]
+}
+
+model Stock { 
+  id        Int      @id @default(autoincrement())
+  code      String?
+ 
+  productItems   ProductItem[]
+  stockBy   String?
+  noted    String?
+  createdAt DateTime @default(now())
+}
+
+model StoreType { 
+  id        Int      @id @default(autoincrement())
+  typeName String   @unique
+  description   String? 
+  remark     String?   
+  stores  Store[]
+}
+
+model Order { 
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  createdAt DateTime @default(now())
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int   
+  createBy  String?
+  orderType String?
+  paymentType String?
+  discount  Float?
+  vat       Float?
+  total     Float?
+  
+  status    String?
+  noted     String?
+
+  orderItems  OrderItem[]
+}
+
+model OrderItem { 
+  id       Int      @id @default(autoincrement())
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId Int  
+
+  productItem   ProductItem @relation(fields: [productItemId], references: [id], onDelete: SetNull)
+  productItemId Int  
+  unit      String?
+  quantity Float?
+  unitPrice Float?
+  total     Float?
+  discount  Float?
+
+}
+
+

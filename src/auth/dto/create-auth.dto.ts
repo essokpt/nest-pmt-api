@@ -13,3 +13,13 @@ export class CreateAuthDto {
     })
     password : string
 }
+
+export class LogoutDto {
+    @ApiProperty({
+        example : 'string',
+        required : true
+    })
+    email : string
+
+    
+}

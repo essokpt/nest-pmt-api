@@ -19,7 +19,8 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, documentFactory);
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe())
-  app.useStaticAssets(join(__dirname, '../../', 'web_files'));
-  await app.listen(process.env.PORT ?? 3000);
+ 
+  //app.useStaticAssets(join(__dirname, '../', 'web_files'));
+  await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();

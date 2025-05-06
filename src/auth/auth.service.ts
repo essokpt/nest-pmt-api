@@ -48,13 +48,36 @@ export class AuthService {
 
     console.log('login', result);
     const payload = { sub: result.id, email: result.email };
+    const generateToken = await this.jwt.signAsync(payload)
+    await this.prisma.user.update({
+      where:{ id : result.id },
+      data: {
+        token : generateToken
+      }
+    })
 
     return { 
-      token : await this.jwt.signAsync(payload),
-      user : result.email
+      token : generateToken,
+      email : result.email,
+      name : result.userName,
+      role : ["admin"]
     };
        
   }
 
+  async logout(email:string){
+    if(email){
+      return this.prisma.user.update({
+        where: { email : email },
+        data:{
+          token: ''
+        }
+      })
+    }
+   
+  }
+
   
 }
+
+

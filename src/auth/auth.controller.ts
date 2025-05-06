@@ -1,6 +1,6 @@
 import { Controller, Get, Post, UseGuards, Request, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
+import { CreateAuthDto, LogoutDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from './local-auth.guard';
@@ -19,6 +19,11 @@ export class AuthController {
   @Post('/login')
   login(@Body() loginDto: CreateAuthDto) {
     return this.authService.login(loginDto.email, loginDto.password);
+  }
+
+  @Post('/logout')
+  logout(@Body() user: LogoutDto) {
+    return this.authService.logout(user.email);
   }
 
   
