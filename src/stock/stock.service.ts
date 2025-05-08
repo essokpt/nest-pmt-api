@@ -20,6 +20,8 @@ export class StockService {
     let stockProduct = []
     if (createDto.length > 0) {
       stockProduct = createDto.map((item: any) => {
+       // console.log('mfg', item.mfg);
+        
         return {
           code: item.code,
           serialNumber: item.serialNumber,
@@ -90,7 +92,7 @@ export class StockService {
             await this.prisma.product.update({
               where: { id: product.id },
               data: {
-                status: 'update',
+                status: 'Instock',
                 stockQuantity: product.stockQuantity + Number(stock[index].quantity)
               }
             })

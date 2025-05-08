@@ -1,10 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
 import { StockService } from './stock.service';
-import { CreateStockDto, GenerateBarcodeDto } from './dto/create-stock.dto';
+import { GenerateBarcodeDto } from './dto/create-stock.dto';
 import { UpdateStockDto } from './dto/update-stock.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
-import * as dpiTools from 'dpi-tools';
 import { Response } from 'express';
 const JsBarcode = require('jsbarcode');
 const { Canvas } = require("canvas");

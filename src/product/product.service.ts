@@ -32,7 +32,7 @@ export class ProductService {
         size: createProduct.size,
         weight: Number(createProduct.weight),
         stockQuantity: 0,
-        status: createProduct.status,
+        status: "New",
         remark: createProduct.remark,
       
         images: {
