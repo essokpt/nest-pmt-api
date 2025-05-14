@@ -146,7 +146,12 @@ export class StockService {
       include: {
         productItems: {
           include: {
-            stockIn: true
+            stockIn: true,
+            product: {
+              include:{
+                images:true
+              }
+            }
           }
         }
       }

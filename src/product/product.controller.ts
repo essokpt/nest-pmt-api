@@ -139,4 +139,9 @@ export class ProductController {
   remove(@Param('id') id: string) {
     return this.productService.remove(+id);
   }
+
+  @Delete('image/:id')
+  removeImage(@Param('id') name: string) {
+    return this.productService.removeImage(name);
+  }
 }
